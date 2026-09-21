@@ -1,0 +1,2 @@
+recursive-include promptguard/frontend/build *
+include pyproject.toml
