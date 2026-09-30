@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Backgrounds — Deep Navy Blue family */
+  --color-pg-bg:        #091525;
+  --color-pg-sidebar:   #0C1C30;
+  --color-pg-surface:   #0F2040;
+  --color-pg-topbar:    #0C1C30;
+  --color-pg-elevated:  #122448;
+  --color-pg-hover:     #0E1E3A;
+  --color-pg-active:    #182E58;
+  --color-pg-analysis:  #07101E;
+
+  /* Borders */
+  --color-pg-border:    #1A2D50;
+  --color-pg-border-2:  #1E3460;
+
+  /* Text — warm cream family */
+  --color-pg-text:      #F0E8CC;
+  --color-pg-body:      #C8BFA0;
+  --color-pg-muted:     #7A6A48;
+  --color-pg-dim:       #3E3020;
+
+  /* Brand — Golden Beige */
+  --color-pg-purple:    #D4B97A;
+  --color-pg-indigo:    #C4A860;
+  --color-pg-violet:    #EDD98A;
+  --color-pg-deep:      #B89850;
+
+  /* Safe (green — readable on navy) */
+  --color-pg-safe:         #34D399;
+  --color-pg-safe-mid:     #6EE7B7;
+  --color-pg-safe-light:   #A7F3D0;
+  --color-pg-safe-bg:      #071A12;
+  --color-pg-safe-border:  #123D28;
+  --color-pg-safe-dark:    #15803D;
+
+  /* Danger (red — kept per brief) */
+  --color-pg-danger:        #F87171;
+  --color-pg-danger-soft:   #FCA5A5;
+  --color-pg-danger-bg:     #1C0909;
+  --color-pg-danger-border: #3D1212;
+  --color-pg-danger-dark:   #2A0E0E;
+}
+html,
+body,
+.react-root {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: none;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2A2438;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4A3F6A;
+}
+
+@keyframes pg-bounce {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+
+  40% {
+    transform: translateY(-6px);
+    opacity: 1;
+  }
+}
+
+.pg-dot {
+  animation: pg-bounce 1.2s ease-in-out infinite;
+}

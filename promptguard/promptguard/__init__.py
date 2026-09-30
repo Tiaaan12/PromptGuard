@@ -3,13 +3,10 @@ import streamlit as st
 out = st.components.v2.component(
     "promptguard.promptguard",
     js="index-*.js",
+    css="index-*.css",
     html='<div class="react-root"></div>',
 )
 
-
-def on_num_clicks_change():
-    """Callback function for when the number of clicks changes in the frontend."""
-    pass
 
 
 # Create a wrapper function for the component.
@@ -19,7 +16,7 @@ def on_num_clicks_change():
 #
 # The wrapper allows us to customize our component's API: we can pre-process its
 # input args, post-process its output value, and add a docstring for users.
-def promptguard(name, key=None):
+def promptguard(name, items=None, key=None, on_item_clicked=lambda: None):
     """Create a new instance of "promptguard".
 
     Parameters
@@ -45,11 +42,16 @@ def promptguard(name, key=None):
     # "default" is a special argument that specifies the initial return
     # value of the component before the user has interacted with it.
     component_value = out(
-        name=name,
-        key=key,
-        default={"num_clicks": 0},
-        data={"name": name},
-        on_num_clicks_change=on_num_clicks_change,
+       key=key,
+       default={"num_clicks": 0, "selected_item": None},
+       data={"name": name, "items": items or []},
+
+        width = "stretch",
+        height = "stretch",
+
+       on_num_clicks_change=lambda: None,
+       on_selected_item_change=lambda: None,
+       on_item_clicked_change=on_item_clicked,
     )
 
     # We could modify the value returned from the component if we wanted.

@@ -4,6 +4,7 @@ import {
 } from "@streamlit/component-v2-lib";
 import { StrictMode } from "react";
 import { createRoot, Root } from "react-dom/client";
+import "./index.css"
 
 import MyComponent, {
   MyComponentDataShape,
@@ -19,7 +20,7 @@ const MyComponentRoot: FrontendRenderer<
   MyComponentStateShape,
   MyComponentDataShape
 > = (args) => {
-  const { data, parentElement, setStateValue } = args;
+  const { data, parentElement, setStateValue, setTriggerValue } = args;
 
   // Get the react-root div from the parentElement that we defined in our
   // `st.components.v2.component` call in Python.
@@ -40,13 +41,18 @@ const MyComponentRoot: FrontendRenderer<
   }
 
   // Here we are accessing the data passed from Streamlit on the Python side.
-  const { name } = data;
+  const { name, items } = data;
 
   // Render/re-render the React application into the root using the React DOM
   // API.
   reactRoot.render(
     <StrictMode>
-      <MyComponent setStateValue={setStateValue} name={name} />
+      <MyComponent
+        name={name}
+        items={items}
+        setStateValue={setStateValue}
+        setTriggerValue={setTriggerValue}
+      />
     </StrictMode>,
   );
 

@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite"
 import process from "node:process";
 import { defineConfig, UserConfig } from "vite";
 
@@ -13,7 +14,7 @@ export default defineConfig(() => {
 
   return {
     base: "./",
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
     define: {
       // We are building in library mode, we need to define the NODE_ENV
       // variable to prevent issues when executing the JS.

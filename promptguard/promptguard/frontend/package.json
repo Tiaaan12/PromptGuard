@@ -20,8 +20,10 @@
   "prettier": {},
   "dependencies": {
     "@streamlit/component-v2-lib": "^0.2.0",
+    "@tailwindcss/vite": "^4.3.3",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@types/node": "^22.14.1",

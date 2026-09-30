@@ -1,28 +1,58 @@
 import streamlit as st
 from promptguard import promptguard
 
-# Add some test code to play with the component while it's in development.
-# During development, we can run this just as we would any other Streamlit
-# app: `$ streamlit run promptguard/example.py`
+st.set_page_config(
+    page_title="PromptGuard",
+    page_icon="🛡️",
+    layout="wide",
+    initial_sidebar_state="collapsed",
+)
 
-st.subheader("Component with constant args")
 
-# Create an instance of our component with a constant `name` arg, and
-# print its output value.
-result = promptguard("World")
-st.markdown("You've clicked %s times!" % int(result["num_clicks"]))
+st.html("""
+<style>
+    html,
+    body,
+    #root {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
 
-st.markdown("---")
-st.subheader("Component with variable args")
+    [data-testid="stAppViewContainer"] {
+        height: 100vh !important;
+        overflow: hidden !important;
+    }
 
-# Create a second instance of our component whose `name` arg will vary
-# based on a text_input widget.
-#
-# We use the special "key" argument to assign a fixed identity to this
-# component instance. By default, when a component's arguments change,
-# it is considered a new instance and will be re-mounted on the frontend
-# and lose its current state. In this case, we want to vary the component's
-# "name" argument without having it get recreated.
-name_input = st.text_input("Enter a name", value="Streamlit")
-result = promptguard(name_input, key="foo")
-st.markdown("You've clicked %s times!" % int(result["num_clicks"]))
+    [data-testid="stAppViewContainer"] > .main {
+        height: 100vh !important;
+        overflow: hidden !important;
+    }
+
+    [data-testid="stMainBlockContainer"] {
+        height: 100vh !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+    }
+
+    header[data-testid="stHeader"] {
+        display: none !important;
+    }
+
+    [data-testid="stToolbar"] {
+        display: none !important;
+    }
+
+    footer {
+        display: none !important;
+    }
+</style>
+""")
+
+promptguard(
+    "PromptGuard",
+    key="promptguard",
+)
