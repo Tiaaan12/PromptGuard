@@ -23,7 +23,7 @@ def preprocess_dataset(df):
 
     df["target"] = df["target"].astype(int)
 
-    df.to_csv('../data/processed/preprocessed_kaggle.csv', index=False)
+    df.to_csv('../data/processed/preprocessed_internal_dataset.csv', index=False)
 
     print(df.head())
     return df

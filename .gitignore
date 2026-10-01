@@ -30,6 +30,6 @@ Thumbs.db
 
 
 # Large datasets
-ml/data/raw/*.csv
-ml/data/processed/*.csv
-ml/data/external/*.csv
+promptguard/promptguard/ml/data/raw/*.csv
+promptguard/promptguard/ml/data/processed/*.csv
+promptguard/promptguard/ml/data/external/*.csv
