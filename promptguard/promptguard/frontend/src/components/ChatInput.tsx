@@ -46,7 +46,7 @@ export default function ChatInput({
 
 
   return (
-    <div className="px-6 pb-4 pt-3 bg-pg-bg border-t border-pg-border">
+    <div className="px-6 pb-4 pt-3 bg-pg-bg border-t border-solid border-[2px] border-pg-border">
 
       <div className="max-w-[740px] mx-auto">
 
@@ -67,7 +67,7 @@ export default function ChatInput({
 
           onFocusCapture={(e) => {
             e.currentTarget.style.borderColor =
-              "#6D28D9";
+              "#9c882f";
 
             e.currentTarget.style.boxShadow =
               "0 2px 16px rgba(109,40,217,0.2)";
@@ -131,7 +131,7 @@ export default function ChatInput({
 
             style={{
               background: canSend
-                ? "linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)"
+                ? "linear-gradient(135deg, #806e0a 0%, #968d1a 100%)"
                 : "#1E1A2E",
 
               color: canSend

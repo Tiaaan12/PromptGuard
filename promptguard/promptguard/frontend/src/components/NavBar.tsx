@@ -2,13 +2,8 @@ import { ShieldIcon } from "../icons";
 
 function NavBar() {
   return (
-    <header className="flex items-center gap-2.5 px-6 py-3.5 bg-pg-topbar border-b border-pg-border">
-      <div
-        className="w-[26px] h-[26px] rounded-[7px] flex items-center justify-center text-white shrink-0"
-        style={{ background: "linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)" }}
-      >
-        <ShieldIcon size={13} />
-      </div>
+    <header className="flex items-center gap-2.5 px-6 py-3.5 bg-pg-topbar border-b border-solid border-[2px] border-pg-border">
+        <ShieldIcon size={48} />
       <div>
         <div className="font-semibold text-[14.5px] text-pg-text leading-tight">
           PromptGuard

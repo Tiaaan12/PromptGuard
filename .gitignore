@@ -27,3 +27,9 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
+
+
+# Large datasets
+ml/data/raw/*.csv
+ml/data/processed/*.csv
+ml/data/external/*.csv

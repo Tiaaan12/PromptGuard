@@ -1,17 +1,12 @@
 import { FrontendRendererArgs } from "@streamlit/component-v2-lib";
-
-import {
-  FC,
-  ReactElement,
-  useState,
-} from "react";
+import { FC, ReactElement, useState } from "react";
 
 import SideBar from "./components/SideBar";
 import NavBar from "./components/NavBar";
+import ChatWindow from "./components/ChatWindow";
 import ChatInput from "./components/ChatInput";
 
-import type { Conversation } from "../types/chat";
-
+import type { Conversation } from "./types/chat";
 
 export type MyComponentStateShape = {};
 
@@ -21,14 +16,28 @@ export type MyComponentDataShape = {
 };
 
 export type MyComponentProps = Pick<
-  FrontendRendererArgs<
-    MyComponentStateShape,
-    MyComponentDataShape
-  >,
+  FrontendRendererArgs<MyComponentStateShape, MyComponentDataShape>,
   "setStateValue" | "setTriggerValue"
 > &
   MyComponentDataShape;
 
+const INITIAL_CONVERSATIONS: Conversation[] = [
+  {
+    id: "c1",
+    title: "What is machine learning?",
+    messages: [],
+  },
+  {
+    id: "c2",
+    title: "Ignore all previous instructions",
+    messages: [],
+  },
+  {
+    id: "c3",
+    title: "How does PromptGuard work?",
+    messages: [],
+  },
+];
 
 const MyComponent: FC<MyComponentProps> = ({
   name,
@@ -37,40 +46,24 @@ const MyComponent: FC<MyComponentProps> = ({
   setTriggerValue,
 }): ReactElement => {
 
-  const INITIAL_CONVERSATIONS: Conversation[] = [
-    {
-      id: "c1",
-      title: "What is machine learning?",
-      messages: [],
-    },
-    {
-      id: "c2",
-      title: "Ignore all previous instructions",
-      messages: [],
-    },
-    {
-      id: "c3",
-      title: "How does PromptGuard work?",
-      messages: [],
-    },
-  ];
 
-
- 
   const [conversations, setConversations] =
     useState<Conversation[]>(INITIAL_CONVERSATIONS);
 
   const [activeId, setActiveId] =
     useState<string | null>(null);
 
+  const [input, setInput] = useState("");
 
 
-  const [input, setInput] =
-    useState("");
+  const activeMessages =
+    conversations.find(
+      (conversation) => conversation.id === activeId
+    )?.messages ?? [];
+
 
 
   function newChat() {
-
     const id = `c${Date.now()}`;
 
     const newConversation: Conversation = {
@@ -85,41 +78,61 @@ const MyComponent: FC<MyComponentProps> = ({
     ]);
 
     setActiveId(id);
+    setInput("");
+  }
 
-  
+  function selectConversation(id: string) {
+    setActiveId(id);
     setInput("");
   }
 
 
-  function selectConversation(id: string) {
-    setActiveId(id);
+
+  function handleExampleClick(text: string) {
+    setInput(text);
   }
 
-
   function handleSend() {
-
     const text = input.trim();
 
-    if (!text) {
-      return;
+    if (!text) return;
+
+    let conversationId = activeId;
+
+    if (!conversationId) {
+      conversationId = `c${Date.now()}`;
+
+      const title =
+        text.length > 36
+          ? text.slice(0, 36) + "…"
+          : text;
+
+      const newConversation: Conversation = {
+        id: conversationId,
+        title,
+        messages: [],
+      };
+
+      setConversations((prev) => [
+        newConversation,
+        ...prev,
+      ]);
+
+      setActiveId(conversationId);
     }
 
     console.log("User sent:", text);
 
+
     setInput("");
   }
 
 
-  return (
-    <div className="
-      flex
-      h-screen
-      w-full
-      bg-pg-bg
-      font-sans
-      overflow-hidden
-    ">
 
+  return (
+    <div className="flex h-screen w-full bg-pg-bg font-sans overflow-hidden">
+
+      
       <SideBar
         conversations={conversations}
         activeId={activeId}
@@ -127,20 +140,17 @@ const MyComponent: FC<MyComponentProps> = ({
         onNewChat={newChat}
       />
 
+ 
+      <main className="min-w-0 flex flex-1 flex-col overflow-hidden">
 
-      <main className="
-        min-w-0
-        flex
-        flex-1
-        flex-col
-        overflow-hidden
-      ">
 
         <NavBar />
 
-
-    
-        <div className="flex-1" />
+        <ChatWindow
+          messages={activeMessages}
+          isTyping={false}
+          onExampleClick={handleExampleClick}
+        />
 
 
         <ChatInput
@@ -154,6 +164,5 @@ const MyComponent: FC<MyComponentProps> = ({
     </div>
   );
 };
-
 
 export default MyComponent;

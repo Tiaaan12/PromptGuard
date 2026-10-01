@@ -10,15 +10,12 @@ type Props = {
 
 export default function Sidebar({ conversations, activeId, onSelect, onNewChat }: Props) {
   return (
-    <aside className="w-64 min-w-64 flex flex-col gap-5 px-3 py-5 bg-pg-sidebar border-r border-pg-border">
+    <aside className="w-64 min-w-64 flex flex-col gap-5 px-3 py-5 bg-pg-sidebar border-r border-solid border-[2px] border-pg-border">
  
       <div className="flex items-center gap-2.5 px-1">
-        <div
-          className="w-[30px] h-[30px] rounded-lg flex items-center justify-center text-white shrink-0"
-          style={{ background: "linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%)" }}
-        >
-          <ShieldIcon size={16} />
-        </div>
+
+          <ShieldIcon size={72} />
+      
         <span className="font-semibold text-[15px] text-pg-text tracking-tight">
           PromptGuard
         </span>
