@@ -91,9 +91,41 @@ def create_augmentation_v3():
         "target" : synthetic_labels  
     })
 
-def combine_training_data(X_train, y_train, augmented_df):
-    pass
-    
+def combine_training_data(
+    X_train,
+    y_train,
+    augmented_df
+):
+
+    X_result = (
+        X_train
+        .reset_index(drop=True)
+        .copy()
+    )
+
+    y_result = (
+        y_train
+        .reset_index(drop=True)
+        .copy()
+    )
+
+    X_result = pd.concat(
+        [
+            X_result,
+            augmented_df["text"]
+        ], ignore_index=True
+    )
+
+
+    y_result = pd.concat(
+
+        [
+            y_result,
+            augmented_df["target"]
+        ], ignore_index=True
+    )
+
+    return X_result, y_result
 
 def save_augmentation(df, path):
     df.to_csv(path, index=False)
