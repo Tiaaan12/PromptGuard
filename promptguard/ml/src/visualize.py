@@ -478,7 +478,12 @@ def plot_class_distribution_by_category(
     ax.set_xlabel("Prompts Within Category (%)")
     ax.set_ylabel("Category")
     ax.set_xlim(0, 100)
-    ax.legend(frameon=False)
+    ax.legend(
+        loc="lower center",
+        bbox_to_anchor=(0.5, 1.01),
+        ncol=2,
+        frameon=False
+    )
 
     ax.invert_yaxis()
 
