@@ -1,0 +1,20 @@
+{
+    "model": "Linear SVM",
+    "feature_configuration": "Char_3_5",
+    "C": 1,
+    "class_weight": "balanced",
+    "random_state": 42,
+    "augmentation_version": "V3",
+    "selection_metric": "F1",
+    "cv_f1": 0.9446440869307725,
+    "test_accuracy": 0.9945,
+    "test_precision": 0.9707602339181286,
+    "test_recall": 0.907103825136612,
+    "test_f1": 0.9378531073446328,
+    "true_negatives": 3812,
+    "false_positives": 5,
+    "false_negatives": 17,
+    "true_positives": 166,
+    "training_samples": 16210,
+    "testing_samples": 4000
+}
