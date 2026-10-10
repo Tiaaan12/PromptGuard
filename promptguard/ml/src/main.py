@@ -44,11 +44,9 @@ TEST_SIZE = 0.20
 SPLIT_RANDOM_STATE = 42
 CV_RANDOM_STATE = 42
 
-
 def create_output_directories():
     for path in (METRICS_PATH, ERRORS_PATH, VISUALIZATION_PATH):
         path.mkdir(parents=True, exist_ok=True)
-
 
 def generate_visualizations(raw_df):
     print("\nGenerating visualizations...")
@@ -114,7 +112,6 @@ def generate_visualizations(raw_df):
     else:
         print(f"Skipped external F1 plot; results not found: {external_results_path}")
 
-
 def save_split_summary(y_train, y_test):
 
     rows = []
@@ -132,7 +129,6 @@ def save_split_summary(y_train, y_test):
         METRICS_PATH / "dataset_split_summary.csv",
         index=False,
     )
-
 
 def save_experiment_configuration(df, X_train, X_test):
     configuration = {
@@ -171,6 +167,68 @@ def save_experiment_configuration(df, X_train, X_test):
     ) as file:
         json.dump(configuration, file, indent=4)
 
+def report_initial_best(initial_results):
+    best = initial_results.loc[initial_results["f1_mean"].idxmax()]
+
+    print("\n" + "=" * 60)
+    print("INITIAL BEST CONFIGURATION")
+    print("=" * 60)
+    print(f"Feature:   {best['feature_configuration']}")
+    print(f"Model:     {best['model']}")
+    print(f"Accuracy:  {best['accuracy_mean']:.4f}")
+    print(f"Precision: {best['precision_mean']:.4f}")
+    print(f"Recall:    {best['recall_mean']:.4f}")
+    print(f"F1:        {best['f1_mean']:.4f}")
+
+def run_hyperparameter_tuning(X_train, y_train):
+    print("\n" + "#" * 60)
+    print("# HYPERPARAMETER TUNING")
+    print("#" * 60)
+
+    lr_search = tune_logistic_regression(X_train, y_train)
+    svm_search = tune_linear_svm(X_train, y_train)
+    nb_search = tune_naive_bayes(X_train, y_train)
+
+    tuning_all, tuning_best = save_hyperparameter_results(
+        lr_search,
+        svm_search,
+        nb_search,
+    )
+    print("\n" + "=" * 60)
+    print("FINAL TUNED MODEL COMPARISON")
+    print("=" * 60)
+    print(f"Logistic Regression: {lr_search.best_score_:.4f}")
+    print(f"Linear SVM:          {svm_search.best_score_:.4f}")
+    print(f"Naive Bayes:         {nb_search.best_score_:.4f}")
+
+    searches = [
+        ("Logistic Regression", "Word_Char", lr_search),
+        ("Linear SVM", "Char_3_5", svm_search),
+        ("Naive Bayes", "Word_1_2", nb_search),
+    ]
+    final_model_name, final_feature_name, final_search = max(
+        searches,
+        key=lambda item: item[2].best_score_,
+    )
+
+    print("\n" + "=" * 60)
+    print("FINAL CORE MODEL SELECTED BY CV F1")
+    print("=" * 60)
+    print(f"Model:                 {final_model_name}")
+    print(f"Feature configuration: {final_feature_name}")
+    print(f"Best parameters:       {final_search.best_params_}")
+    print(f"CV F1:                 {final_search.best_score_:.4f}")
+
+    return (
+        lr_search,
+        svm_search,
+        nb_search,
+        tuning_all,
+        tuning_best,
+        final_model_name,
+        final_feature_name,
+        final_search,
+    )
 
 def main():
     create_output_directories()
@@ -194,7 +252,34 @@ def main():
     save_split_summary(y_train, y_test)
     save_experiment_configuration(df, X_train, X_test)
 
+    print("\n" + "#" * 60)
+    print("# INITIAL MODEL + FEATURE COMPARISON (UNTUNED)")
+    print("#" * 60)
+    initial_results = compare_models(X_train, y_train)
+    report_initial_best(initial_results)
 
+    print("\n" + "#" * 60)
+    print("# FEATURE ENGINEERING ABLATION")
+    print("#" * 60)
+    run_feature_ablation(X_train, y_train)
+
+    (
+        _lr_search,
+        _svm_search,
+        _nb_search,
+        _tuning_all,
+        tuning_best,
+        final_model_name,
+        final_feature_name,
+        final_search,
+    ) = run_hyperparameter_tuning(X_train, y_train)
+    save_model_selection_summary(
+        initial_results,
+        tuning_best,
+        final_model_name,
+    )
+
+   
 
 if __name__ == "__main__":
     main()
