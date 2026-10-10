@@ -1,0 +1,2 @@
+model,feature_configuration,C,augmentation_version,cv_f1,test_accuracy,test_precision,test_recall,test_f1,true_negatives,false_positives,false_negatives,true_positives,training_samples,testing_samples
+Linear SVM,Char_3_5,1,V3,0.9446440869307725,0.9945,0.9707602339181286,0.907103825136612,0.9378531073446328,3812,5,17,166,16210,4000

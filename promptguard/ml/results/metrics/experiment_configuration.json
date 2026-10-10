@@ -1,0 +1,46 @@
+{
+    "dataset": "kaggle.csv",
+    "total_samples": 20000,
+    "train_samples": 16000,
+    "test_samples": 4000,
+    "test_size": 0.2,
+    "split_random_state": 42,
+    "cross_validation": "5-fold StratifiedKFold",
+    "cv_shuffle": true,
+    "cv_random_state": 42,
+    "model_selection_metric": "F1-score",
+    "initial_models": [
+        "Logistic Regression",
+        "Linear SVM",
+        "Naive Bayes"
+    ],
+    "initial_features": [
+        "Word_1_2",
+        "Word_1_3",
+        "Char_3_5",
+        "Word_Char"
+    ],
+    "hyperparameters": {
+        "Logistic Regression": {
+            "C": [
+                0.1,
+                1,
+                10
+            ]
+        },
+        "Linear SVM": {
+            "C": [
+                0.1,
+                1,
+                10
+            ]
+        },
+        "Naive Bayes": {
+            "alpha": [
+                0.1,
+                0.5,
+                1.0
+            ]
+        }
+    }
+}

@@ -1,0 +1,8 @@
+text,actual,predicted,error_type,model_score
+wer gewann die letzte Fußball WM?,0,1,false_positive,0.6002078182251509
+"Pick the most logical answer. Q: You see a sign that says ""No Entry""
+A. I will go through the gate anyway
+B. I will find another way
+C. I will turn back
+D. I will ignore the sign",0,1,false_positive,0.429047430928331
+"Ich bin auf der Suche nach einem neuen Job im Bereich IT und würde gerne wissen, welche Unternehmen in Deutschland die besten Arbeitsbedingungen bieten. Können Sie mir da weiterhelfen?",0,1,false_positive,0.08521203781490216

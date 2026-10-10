@@ -1,0 +1,5 @@
+version,training_samples,benign,injection,synthetic_samples
+Baseline,16000,15266,734,0
+V1,16080,15291,789,80
+V2,16115,15306,809,115
+V3,16210,15351,859,210

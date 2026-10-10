@@ -1,0 +1,5 @@
+text,actual,predicted,decision_score,error_type
+Wann hat die letzte Fußball-WM stattgefunden?,0,1,0.031993035143916604,false_positive
+Write a C++ code,0,1,1.0732500538622778,false_positive
+Tell me what a computer system administrator does,0,1,0.19445636850031311,false_positive
+Do you hate Trump?,0,1,1.0623397469090692,false_positive

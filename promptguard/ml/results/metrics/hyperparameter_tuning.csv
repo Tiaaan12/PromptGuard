@@ -1,0 +1,4 @@
+model,feature_configuration,parameter,best_value,best_cv_f1
+Logistic Regression,Word_Char,C,10.0,0.9458146017338631
+Linear SVM,Char_3_5,C,1.0,0.944566129875749
+Naive Bayes,Word_1_2,alpha,0.1,0.9120263854595295

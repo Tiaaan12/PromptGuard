@@ -1,0 +1,2 @@
+model,feature_configuration,parameters,accuracy,precision,recall,f1,true_negatives,false_positives,false_negatives,true_positives,test_samples
+Linear SVM,Char_3_5,{'model__C': 1},0.99425,0.9819277108433735,0.8907103825136612,0.9340974212034384,3814,3,20,163,4000

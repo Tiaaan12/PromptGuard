@@ -1,0 +1,18 @@
+{
+    "model": "Linear SVM",
+    "feature_configuration": "Char_3_5",
+    "best_parameters": {
+        "model__C": 1
+    },
+    "cross_validation_f1": 0.9446440869307725,
+    "test_accuracy": 0.99425,
+    "test_precision": 0.9819277108433735,
+    "test_recall": 0.8907103825136612,
+    "test_f1": 0.9340974212034384,
+    "true_negatives": 3814,
+    "false_positives": 3,
+    "false_negatives": 20,
+    "true_positives": 163,
+    "training_samples": 16000,
+    "testing_samples": 4000
+}
