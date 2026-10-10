@@ -50,7 +50,7 @@ export default function ChatInput({
 
       <div className="max-w-[740px] mx-auto">
 
-        {/* Input box */}
+ 
         <div
           className="
             flex items-end gap-2
@@ -96,7 +96,7 @@ export default function ChatInput({
               border-none
               outline-none
               text-[14px]
-              text-pg-text
+              text-pg-muted
               placeholder:text-pg-dim
               font-sans
               leading-relaxed
@@ -157,7 +157,7 @@ export default function ChatInput({
           gap-1.5
           mt-2
           text-[11px]
-          text-pg-dim
+          text-pg-muted
         ">
           <ShieldIcon size={11} />
 
