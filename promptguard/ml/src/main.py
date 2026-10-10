@@ -10,7 +10,6 @@ from sklearn.metrics import (
     confusion_matrix,
     classification_report,
 )
-
 from data_preprocessing import load_dataset, preprocess_dataset, split_dataset
 from train import (
     compare_models,
@@ -48,6 +47,7 @@ def create_output_directories():
     for path in (METRICS_PATH, ERRORS_PATH, VISUALIZATION_PATH):
         path.mkdir(parents=True, exist_ok=True)
 
+
 def generate_visualizations(raw_df):
     print("\nGenerating visualizations...")
     plot_prompt_length_distribution(
@@ -72,7 +72,6 @@ def generate_visualizations(raw_df):
         raw_df,
         VISUALIZATION_PATH / "class_distribution.png",
     )
-.
     if MODEL_PATH.exists():
         for title, plot_function, kwargs in (
             (
@@ -113,7 +112,6 @@ def generate_visualizations(raw_df):
         print(f"Skipped external F1 plot; results not found: {external_results_path}")
 
 def save_split_summary(y_train, y_test):
-
     rows = []
     for subset_name, labels in (("train", y_train), ("test", y_test)):
         rows.append(
@@ -124,7 +122,6 @@ def save_split_summary(y_train, y_test):
                 "injection": int((labels == 1).sum()),
             }
         )
-
     pd.DataFrame(rows).to_csv(
         METRICS_PATH / "dataset_split_summary.csv",
         index=False,
@@ -180,6 +177,7 @@ def report_initial_best(initial_results):
     print(f"Recall:    {best['recall_mean']:.4f}")
     print(f"F1:        {best['f1_mean']:.4f}")
 
+
 def run_hyperparameter_tuning(X_train, y_train):
     print("\n" + "#" * 60)
     print("# HYPERPARAMETER TUNING")
@@ -188,12 +186,12 @@ def run_hyperparameter_tuning(X_train, y_train):
     lr_search = tune_logistic_regression(X_train, y_train)
     svm_search = tune_linear_svm(X_train, y_train)
     nb_search = tune_naive_bayes(X_train, y_train)
-
     tuning_all, tuning_best = save_hyperparameter_results(
         lr_search,
         svm_search,
         nb_search,
     )
+
     print("\n" + "=" * 60)
     print("FINAL TUNED MODEL COMPARISON")
     print("=" * 60)
@@ -229,6 +227,158 @@ def run_hyperparameter_tuning(X_train, y_train):
         final_feature_name,
         final_search,
     )
+
+def save_model_selection_summary(initial_results, tuning_best, final_model_name):
+    initial_best_by_model = (
+        initial_results.sort_values(
+            ["model", "f1_mean"],
+            ascending=[True, False],
+        )
+        .drop_duplicates(subset=["model"])
+    )
+    rows = []
+    for _, row in initial_best_by_model.iterrows():
+        rows.append(
+            {
+                "stage": "Initial comparison",
+                "model": row["model"],
+                "feature_configuration": row["feature_configuration"],
+                "parameter": "",
+                "parameter_value": "",
+                "accuracy": row["accuracy_mean"],
+                "precision": row["precision_mean"],
+                "recall": row["recall_mean"],
+                "f1": row["f1_mean"],
+                "f1_std": row["f1_std"],
+                "selected_final": False,
+            }
+        )
+    for _, row in tuning_best.iterrows():
+        rows.append(
+            {
+                "stage": "After hyperparameter tuning",
+                "model": row["model"],
+                "feature_configuration": row["feature_configuration"],
+                "parameter": row["parameter"],
+                "parameter_value": row["best_value"],
+                "accuracy": row["accuracy_mean"],
+                "precision": row["precision_mean"],
+                "recall": row["recall_mean"],
+                "f1": row["f1_mean"],
+                "f1_std": row["f1_std"],
+                "selected_final": row["model"] == final_model_name,
+            }
+        )
+    pd.DataFrame(rows).to_csv(
+        METRICS_PATH / "model_selection_summary.csv",
+        index=False,
+    )
+
+def evaluate_selected_model(final_search, model_name, feature_name, X_train, X_test, y_test):
+    pipeline = final_search.best_estimator_
+    predictions = pipeline.predict(X_test)
+
+    metrics = {
+        "accuracy": accuracy_score(y_test, predictions),
+        "precision": precision_score(y_test, predictions, zero_division=0),
+        "recall": recall_score(y_test, predictions, zero_division=0),
+        "f1": f1_score(y_test, predictions, zero_division=0),
+    }
+    cm = confusion_matrix(y_test, predictions, labels=[0, 1])
+    tn, fp, fn, tp = cm.ravel()
+
+    print("\n" + "=" * 60)
+    print("HELD-OUT INTERNAL TEST RESULTS")
+    print("=" * 60)
+    for name, value in metrics.items():
+        print(f"{name.capitalize():10s}: {value:.4f}")
+    print("\nConfusion matrix [ [TN, FP], [FN, TP] ]:")
+    print(cm)
+    print(f"TN: {tn} | FP: {fp} | FN: {fn} | TP: {tp}")
+
+    pd.DataFrame(
+        [
+            {
+                "model": model_name,
+                "feature_configuration": feature_name,
+                "parameters": str(final_search.best_params_),
+                **metrics,
+                "true_negatives": tn,
+                "false_positives": fp,
+                "false_negatives": fn,
+                "true_positives": tp,
+                "test_samples": len(X_test),
+            }
+        ]
+    ).to_csv(METRICS_PATH / "baseline_metrics.csv", index=False)
+
+    report = classification_report(
+        y_test,
+        predictions,
+        labels=[0, 1],
+        target_names=["benign", "injection"],
+        output_dict=True,
+        zero_division=0,
+    )
+    pd.DataFrame(report).transpose().to_csv(
+        METRICS_PATH / "baseline_classification_report.csv"
+    )
+
+    pd.DataFrame(
+        cm,
+        index=["actual_benign", "actual_injection"],
+        columns=["predicted_benign", "predicted_injection"],
+    ).to_csv(METRICS_PATH / "baseline_confusion_matrix.csv")
+
+    errors = pd.DataFrame(
+        {
+            "text": X_test.reset_index(drop=True),
+            "actual": y_test.reset_index(drop=True),
+            "predicted": pd.Series(predictions),
+        }
+    )
+    errors["error_type"] = "correct"
+    errors.loc[(errors["actual"] == 0) & (errors["predicted"] == 1), "error_type"] = "false_positive"
+    errors.loc[(errors["actual"] == 1) & (errors["predicted"] == 0), "error_type"] = "false_negative"
+
+    if hasattr(pipeline, "decision_function"):
+        errors["model_score"] = pipeline.decision_function(X_test)
+    elif hasattr(pipeline, "predict_proba"):
+        errors["model_score"] = pipeline.predict_proba(X_test)[:, 1]
+
+    errors.to_csv(ERRORS_PATH / "baseline_errors.csv", index=False)
+    errors[errors["error_type"] == "false_negative"].to_csv(
+        ERRORS_PATH / "baseline_false_negatives.csv",
+        index=False,
+    )
+    errors[errors["error_type"] == "false_positive"].to_csv(
+        ERRORS_PATH / "baseline_false_positives.csv",
+        index=False,
+    )
+
+    model_info = {
+        "model": model_name,
+        "feature_configuration": feature_name,
+        "best_parameters": final_search.best_params_,
+        "cross_validation_f1": final_search.best_score_,
+        "test_accuracy": metrics["accuracy"],
+        "test_precision": metrics["precision"],
+        "test_recall": metrics["recall"],
+        "test_f1": metrics["f1"],
+        "true_negatives": int(tn),
+        "false_positives": int(fp),
+        "false_negatives": int(fn),
+        "true_positives": int(tp),
+        "training_samples": len(X_train),
+        "testing_samples": len(X_test),
+    }
+    with open(
+        METRICS_PATH / "final_model_information.json",
+        "w",
+        encoding="utf-8",
+    ) as file:
+        json.dump(model_info, file, indent=4)
+
 
 def main():
     create_output_directories()
@@ -279,7 +429,44 @@ def main():
         final_model_name,
     )
 
-   
+    evaluate_selected_model(
+        final_search,
+        final_model_name,
+        final_feature_name,
+        X_train,
+        X_test,
+        y_test,
+    )
+
+    print("\n" + "=" * 60)
+    print("EXPERIMENT COMPLETE")
+    print("=" * 60)
+    print("Metrics saved to:", METRICS_PATH)
+    print("Errors saved to:", ERRORS_PATH)
+    print("Visualizations saved to:", VISUALIZATION_PATH)
+    print("\nMetric files generated/updated:")
+    for name in (
+        "dataset_split_summary.csv",
+        "experiment_configuration.json",
+        "model_comparison_initial.csv",
+        "model_comparison_initial_folds.csv",
+        "feature_ablation.csv",
+        "hyperparameter_tuning_all.csv",
+        "hyperparameter_tuning_best.csv",
+        "model_selection_summary.csv",
+        "baseline_metrics.csv",
+        "baseline_classification_report.csv",
+        "baseline_confusion_matrix.csv",
+        "final_model_information.json",
+    ):
+        print(" -", name)
+    print("\nError files generated/updated:")
+    for name in (
+        "baseline_errors.csv",
+        "baseline_false_negatives.csv",
+        "baseline_false_positives.csv",
+    ):
+        print(" -", name)
 
 if __name__ == "__main__":
     main()
