@@ -14,7 +14,6 @@ from data_preprocessing import load_dataset, preprocess_dataset, split_dataset
 from augmentation import create_augmentation_v3, combine_training_data
 from augment_and_finalize import get_final_pipeline
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_PATH = BASE_DIR / "data" / "raw" / "internal_dataset.csv"
 RESULTS_PATH = BASE_DIR / "results" / "metrics"
@@ -23,9 +22,7 @@ ERRORS_PATH = BASE_DIR / "results" / "errors"
 for directory in (RESULTS_PATH, ERRORS_PATH):
     directory.mkdir(parents=True, exist_ok=True)
 
-
 def create_robustness_split():
-    """Create a validation split from the original internal training partition."""
     print("\nCreating fresh robustness validation split...")
 
     internal = preprocess_dataset(load_dataset(DATA_PATH))
@@ -55,7 +52,6 @@ def create_robustness_split():
 
 
 def save_prediction_errors(predictions_df, version_name):
-    """Save all validation predictions and the false-positive/negative subsets."""
     prefix = f"robustness_{version_name.lower()}"
     predictions_df.to_csv(ERRORS_PATH / f"{prefix}_predictions.csv", index=False)
 
@@ -66,8 +62,7 @@ def save_prediction_errors(predictions_df, version_name):
         predictions_df[predictions_df["error_type"] == error_type].to_csv(
             ERRORS_PATH / f"{prefix}_{file_suffix}.csv", index=False
         )
-
-
+        
 def evaluate_model(version_name, X_train, y_train, X_validation, y_validation):
     print(f"\nEvaluating {version_name}...")
 
@@ -117,7 +112,6 @@ def evaluate_model(version_name, X_train, y_train, X_validation, y_validation):
         "false_negatives": fn,
         "true_positives": tp,
     }
-
 
 def build_comparison(results):
     results_df = pd.DataFrame(results)

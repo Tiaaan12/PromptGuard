@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 out = st.components.v2.component(
     "promptguard.promptguard",
     js="index-*.js",
@@ -8,52 +9,59 @@ out = st.components.v2.component(
 )
 
 
-
-# Create a wrapper function for the component.
-#
-# This is an optional best practice. We could simply expose the component
-# function returned by `st.components.v2.component` and call it done.
-#
-# The wrapper allows us to customize our component's API: we can pre-process its
-# input args, post-process its output value, and add a docstring for users.
-def promptguard(name, items=None, key=None, on_item_clicked=lambda: None):
-    """Create a new instance of "promptguard".
+def promptguard(
+    name,
+    items=None,
+    detection_result=None,
+    key=None,
+    on_item_clicked=lambda: None,
+    on_prompt_submitted=lambda: None,
+):
+    """
+    Create a new instance of the PromptGuard component.
 
     Parameters
     ----------
-    name: str
-        The name of the thing we're saying hello to. The component will display
-        the text "Hello, {name}!"
-    key: str or None
-        An optional key that uniquely identifies this component.
+    name : str
+        Component name.
 
-    Returns
-    -------
-    int
-        The number of times the component's "Click Me" button has been clicked.
-        (This is the value passed to `Streamlit.setComponentValue` on the
-        frontend.)
+    items : list[str] | None
+        Optional list of items.
 
+    detection_result : dict | None
+        Latest result returned by the PromptGuard ML model.
+
+    key : str | None
+        Optional unique key for the component.
+
+    on_item_clicked : callable
+        Callback for item-click events.
+
+    on_prompt_submitted : callable
+        Callback triggered when a prompt is submitted.
     """
-    # Call through to our private component function. Arguments we pass here
-    # will be sent to the frontend, where they'll be available in an "args"
-    # dictionary.
-    #
-    # "default" is a special argument that specifies the initial return
-    # value of the component before the user has interacted with it.
+
     component_value = out(
-       key=key,
-       default={"num_clicks": 0, "selected_item": None},
-       data={"name": name, "items": items or []},
+        key=key,
 
-        width = "stretch",
-        height = "stretch",
+        default={
+            "num_clicks": 0,
+            "selected_item": None,
+        },
 
-       on_num_clicks_change=lambda: None,
-       on_selected_item_change=lambda: None,
-       on_item_clicked_change=on_item_clicked,
+        data={
+            "name": name,
+            "items": items or [],
+            "detection_result": detection_result,
+        },
+
+        width="stretch",
+        height="stretch",
+
+        on_num_clicks_change=lambda: None,
+        on_selected_item_change=lambda: None,
+        on_item_clicked_change=on_item_clicked,
+        on_prompt_submitted_change=on_prompt_submitted,
     )
 
-    # We could modify the value returned from the component if we wanted.
-    # There's no need to do this in our simple example - but it's an option.
     return component_value
