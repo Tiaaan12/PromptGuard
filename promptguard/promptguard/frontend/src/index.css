@@ -6,7 +6,6 @@
   --font-sans: 'DM Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  /* Backgrounds — Deep Navy Blue family */
   --color-pg-bg:        #091525;
   --color-pg-sidebar:   #0C1C30;
   --color-pg-surface:   #0F2040;
@@ -16,17 +15,14 @@
   --color-pg-active:    #182E58;
   --color-pg-analysis:  #07101E;
 
-  /* Borders */
   --color-pg-border:    #1A2D50;
   --color-pg-border-2:  #1E3460;
 
-  /* Text — warm cream family */
   --color-pg-text:      #F0E8CC;
   --color-pg-body:      #C8BFA0;
   --color-pg-muted:     #7A6A48;
   --color-pg-dim:       #3E3020;
 
-  /* Brand — Golden Beige */
   --color-pg-purple:    #D4B97A;
   --color-pg-indigo:    #C4A860;
   --color-pg-violet:    #EDD98A;
