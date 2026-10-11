@@ -28,7 +28,7 @@
   --color-pg-violet:    #EDD98A;
   --color-pg-deep:      #B89850;
 
-  /* Safe (green — readable on navy) */
+
   --color-pg-safe:         #34D399;
   --color-pg-safe-mid:     #6EE7B7;
   --color-pg-safe-light:   #A7F3D0;
@@ -36,7 +36,6 @@
   --color-pg-safe-border:  #123D28;
   --color-pg-safe-dark:    #15803D;
 
-  /* Danger (red — kept per brief) */
   --color-pg-danger:        #F87171;
   --color-pg-danger-soft:   #FCA5A5;
   --color-pg-danger-bg:     #1C0909;

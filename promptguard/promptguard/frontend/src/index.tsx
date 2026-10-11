@@ -22,19 +22,13 @@ const MyComponentRoot: FrontendRenderer<
   MyComponentStateShape,
   MyComponentDataShape
 > = (args) => {
-  const {
-    data,
-    parentElement,
-    setTriggerValue,
-  } = args;
+  const { data, parentElement, setTriggerValue } = args;
+  console.log("[PromptGuard] Data received from Streamlit:", data);
 
-  const rootElement =
-    parentElement.querySelector(".react-root");
+  const rootElement = parentElement.querySelector(".react-root");
 
   if (!rootElement) {
-    throw new Error(
-      "Unexpected: React root element not found"
-    );
+    throw new Error("Unexpected: React root element not found");
   }
 
   let reactRoot = reactRoots.get(parentElement);
@@ -44,12 +38,13 @@ const MyComponentRoot: FrontendRenderer<
     reactRoots.set(parentElement, reactRoot);
   }
 
-  // Get ALL data we need from Python.
   const {
     name,
     items,
     detection_result,
+    detection_response_id,
   } = data;
+console.log("[PromptGuard] Raw component data:", data);
 
   reactRoot.render(
     <StrictMode>
@@ -57,16 +52,17 @@ const MyComponentRoot: FrontendRenderer<
         name={name}
         items={items}
         detection_result={detection_result}
+        detection_response_id={detection_response_id}
         setTriggerValue={setTriggerValue}
       />
     </StrictMode>
   );
 
   return () => {
-    const reactRoot = reactRoots.get(parentElement);
+    const root = reactRoots.get(parentElement);
 
-    if (reactRoot) {
-      reactRoot.unmount();
+    if (root) {
+      root.unmount();
       reactRoots.delete(parentElement);
     }
   };
