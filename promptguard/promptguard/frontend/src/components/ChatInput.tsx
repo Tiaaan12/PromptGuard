@@ -46,7 +46,7 @@ export default function ChatInput({
 
 
   return (
-    <div className="px-6 pb-4 pt-3 bg-pg-bg border-t border-solid border-[2px] border-pg-border">
+    <div className="px-6 pb-4 pt-3 bg-pg-bg border-t border-solid border-pg-border">
 
       <div className="max-w-[740px] mx-auto">
 
@@ -67,10 +67,10 @@ export default function ChatInput({
 
           onFocusCapture={(e) => {
             e.currentTarget.style.borderColor =
-              "#9c882f";
+              "#D4B97A";
 
             e.currentTarget.style.boxShadow =
-              "0 2px 16px rgba(109,40,217,0.2)";
+              "0 2px 16px rgba(212,185,122,0.15)";
           }}
 
           onBlurCapture={(e) => {
@@ -96,7 +96,7 @@ export default function ChatInput({
               border-none
               outline-none
               text-[14px]
-              text-pg-muted
+              text-pg-text
               placeholder:text-pg-dim
               font-sans
               leading-relaxed
@@ -106,7 +106,7 @@ export default function ChatInput({
             "
 
             style={{
-              caretColor: "#8B5CF6",
+              caretColor: "#D4B97A",
             }}
           />
 
@@ -131,15 +131,15 @@ export default function ChatInput({
 
             style={{
               background: canSend
-                ? "linear-gradient(135deg, #806e0a 0%, #968d1a 100%)"
+                ? "linear-gradient(135deg, #D4B97A 0%, #B89850 100%)"
                 : "#1E1A2E",
 
               color: canSend
-                ? "#fff"
-                : "#4A3F6A",
+                ? "#0C1C30"
+                : "#3E3020",
 
               boxShadow: canSend
-                ? "0 2px 8px rgba(124,58,237,0.4)"
+                ? "0 2px 8px rgba(212,185,122,0.35)"
                 : "none",
             }}
           >
@@ -157,7 +157,7 @@ export default function ChatInput({
           gap-1.5
           mt-2
           text-[11px]
-          text-pg-muted
+          text-pg-dim
         ">
           <ShieldIcon size={11} />
 

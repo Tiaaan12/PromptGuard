@@ -10,11 +10,11 @@ type Props = {
 
 export default function Sidebar({ conversations, activeId, onSelect, onNewChat }: Props) {
   return (
-    <aside className="w-64 min-w-64 flex flex-col gap-5 px-3 py-5 bg-pg-sidebar border-r border-solid border-[2px] border-pg-border">
+    <aside className="w-64 min-w-64 flex flex-col gap-5 px-3 py-5 bg-pg-sidebar border-r border-solid border-pg-border">
  
       <div className="flex items-center gap-2.5 px-1">
 
-          <ShieldIcon size={72} />
+          <ShieldIcon size={60} />
       
         <span className="font-semibold text-[15px] text-pg-text tracking-tight">
           PromptGuard
@@ -29,7 +29,7 @@ export default function Sidebar({ conversations, activeId, onSelect, onNewChat }
       </button>
 
       <div className="flex-1 overflow-auto">
-        <p className="px-1.5 mb-1.5 text-[10.5px] font-semibold text-pg-muted tracking-widest uppercase">
+        <p className="px-1.5 mb-1.5 text-[10.5px] font-semibold text-pg-dim tracking-widest uppercase">
           Recent
         </p>
         <div className="flex flex-col gap-px">
@@ -42,7 +42,7 @@ export default function Sidebar({ conversations, activeId, onSelect, onNewChat }
                 truncate transition-[background,color] duration-150 font-sans
                 ${activeId === conv.id
                   ? "bg-pg-active text-pg-violet font-medium"
-                  : "bg-transparent text-pg-muted hover:bg-pg-hover color-pg-text"}
+                  : "bg-transparent text-pg-muted hover:bg-pg-hover hover:text-[#A78BFA]"}
               `}
             >
               {conv.title}
