@@ -1,4 +1,4 @@
-import type { Conversation } from "../../types/chat";
+import type { Conversation } from "../types/chat";
 import { ShieldIcon, PlusIcon } from "../icons";
 
 type Props = {

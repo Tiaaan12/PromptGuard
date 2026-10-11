@@ -147,9 +147,6 @@ export default function ChatInput({
           </button>
 
         </div>
-
-
-        {/* Footer label */}
         <div className="
           flex
           items-center

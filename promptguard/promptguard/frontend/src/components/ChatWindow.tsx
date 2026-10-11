@@ -1,17 +1,16 @@
 import { useEffect, useRef } from "react";
 
-import type { DetectionResult } from "../types/detection";
 import type { Message } from "../types/chat";
-
 import { ShieldIcon } from "../icons";
-import MessageBubble from "./MessageBubble";
+import type { DetectionResult } from "../types/detection";
 import DetectionCard from "./DetectionCard";
+import MessageBubble from "./MessageBubble";
 
 type Props = {
   messages: Message[];
   isTyping: boolean;
   onExampleClick: (text: string) => void;
-  detectionResult: DetectionResult | null;
+
 };
 
 const EXAMPLE_PROMPTS = [
@@ -23,18 +22,26 @@ const EXAMPLE_PROMPTS = [
 function TypingIndicator() {
   return (
     <div className="mb-7 flex items-start gap-3">
-      <div className="flex h-6 w-6 shrink-0 items-center justify-center">
-        <ShieldIcon size={24} />
+      <div
+        className="mt-0.5 flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-xl text-[#0C1C30]"
+        style={{
+          background:
+            "linear-gradient(135deg, #D4B97A 0%, #B89850 100%)",
+        }}
+      >
+        <ShieldIcon size={17} />
       </div>
 
-      <div className="flex items-center gap-1.5 rounded-xl border border-pg-border-2 bg-pg-surface px-3.5 py-3">
+      <div
+        role="status"
+        aria-label="PromptGuard is processing the prompt"
+        className="flex items-center gap-1.5 rounded-xl border border-pg-border-2 bg-pg-surface px-4 py-3"
+      >
         {[0, 1, 2].map((i) => (
-          <div
+          <span
             key={i}
-            className="pg-dot h-1.5 w-1.5 rounded-full bg-pg-dim"
-            style={{
-              animationDelay: `${i * 0.2}s`,
-            }}
+            className="pg-dot h-1.5 w-1.5 rounded-full bg-pg-safe"
+            style={{ animationDelay: `${i * 0.2}s` }}
           />
         ))}
       </div>
@@ -68,12 +75,7 @@ function EmptyState({
             key={prompt}
             type="button"
             onClick={() => onExampleClick(prompt)}
-            className="
-              cursor-pointer rounded-full border border-pg-border-2
-              bg-pg-surface px-3.5 py-2 text-[12.5px]
-              text-pg-muted transition-colors duration-150
-              hover:border-pg-indigo hover:bg-pg-active hover:text-pg-violet
-            "
+            className="cursor-pointer rounded-full border border-pg-border-2 bg-pg-surface px-3.5 py-2 text-[12.5px] text-pg-muted transition-colors duration-150 hover:border-pg-indigo hover:bg-pg-active hover:text-pg-violet"
           >
             {prompt}
           </button>
@@ -87,7 +89,6 @@ export default function ChatWindow({
   messages,
   isTyping,
   onExampleClick,
-  detectionResult,
 }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -96,9 +97,9 @@ export default function ChatWindow({
       behavior: "smooth",
       block: "end",
     });
-  }, [messages, isTyping, detectionResult]);
+  }, [messages, isTyping]);
 
-  if (messages.length === 0 && !detectionResult) {
+  if (messages.length === 0 && !isTyping) {
     return (
       <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
         <EmptyState onExampleClick={onExampleClick} />
@@ -110,20 +111,11 @@ export default function ChatWindow({
     <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
       <div className="mx-auto w-full max-w-[740px] px-6 pb-6 pt-6">
         {messages.map((message) => (
-          <MessageBubble
-            key={message.id}
-            message={message}
-          />
+          <MessageBubble key={message.id} message={message} />
         ))}
 
         {isTyping && <TypingIndicator />}
-
-        {detectionResult && (
-          <div className="mb-7">
-            <DetectionCard result={detectionResult} />
-          </div>
-        )}
-
+        
         <div ref={bottomRef} />
       </div>
     </div>
