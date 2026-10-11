@@ -13,6 +13,7 @@ def promptguard(
     name,
     items=None,
     detection_result=None,
+    detection_response_id=None,
     key=None,
     on_item_clicked=lambda: None,
     on_prompt_submitted=lambda: None,
@@ -41,7 +42,7 @@ def promptguard(
         Callback triggered when a prompt is submitted.
     """
 
-    component_value = out(
+    return out(
         key=key,
 
         default={
@@ -53,6 +54,7 @@ def promptguard(
             "name": name,
             "items": items or [],
             "detection_result": detection_result,
+            "detection_response_id": detection_response_id,
         },
 
         width="stretch",
@@ -64,4 +66,4 @@ def promptguard(
         on_prompt_submitted_change=on_prompt_submitted,
     )
 
-    return component_value
+  

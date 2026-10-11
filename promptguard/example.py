@@ -1,7 +1,9 @@
+import json
 import streamlit as st
 
 from promptguard import promptguard
 from ml.src.predict import predict_prompt
+
 
 st.set_page_config(
     page_title="PromptGuard",
@@ -10,30 +12,17 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-
 st.html("""
 <style>
-    html,
-    body,
-    #root {
+    html, body, #root {
         margin: 0 !important;
         padding: 0 !important;
         height: 100% !important;
         overflow: hidden !important;
     }
 
-    [data-testid="stAppViewContainer"] {
-        height: 100vh !important;
-        width: 100% !important;
-        overflow: hidden !important;
-    }
-
-    [data-testid="stAppViewContainer"] > .main {
-        height: 100vh !important;
-        width: 100% !important;
-        overflow: hidden !important;
-    }
-
+    [data-testid="stAppViewContainer"],
+    [data-testid="stAppViewContainer"] > .main,
     [data-testid="stMainBlockContainer"] {
         height: 100vh !important;
         width: 100% !important;
@@ -43,14 +32,8 @@ st.html("""
         overflow: hidden !important;
     }
 
-    header[data-testid="stHeader"] {
-        display: none !important;
-    }
-
-    [data-testid="stToolbar"] {
-        display: none !important;
-    }
-
+    header[data-testid="stHeader"],
+    [data-testid="stToolbar"],
     footer {
         display: none !important;
     }
@@ -60,35 +43,67 @@ st.html("""
 if "detection_result" not in st.session_state:
     st.session_state.detection_result = None
 
-result = promptguard(
+if "detection_response_id" not in st.session_state:
+    st.session_state.detection_response_id = None
+
+if "last_processed_request_id" not in st.session_state:
+    st.session_state.last_processed_request_id = None
+
+print("OUTGOING RESULT:", st.session_state.detection_result)
+print("OUTGOING RESPONSE ID:", st.session_state.detection_response_id)
+
+component_result = promptguard(
     "PromptGuard",
     key="promptguard",
     detection_result=st.session_state.detection_result,
+    detection_response_id=st.session_state.detection_response_id,
     on_prompt_submitted=lambda: None,
 )
 
-prompt = result.prompt_submitted
+raw_request = component_result.prompt_submitted
 
-if prompt:
-    print(f"Python received prompt: {prompt}")
+print("COMPONENT REQUEST:", repr(raw_request))
 
+if raw_request:
     try:
-        prediction = predict_prompt(prompt)
+        request = json.loads(raw_request)
 
-        print(f"ML result: {prediction}")
+        request_id = request["request_id"]
+        prompt = request["prompt"]
 
-        st.session_state.detection_result = prediction
+        print("REQUEST ID:", request_id)
+        print("PROMPT:", prompt)
 
-        st.rerun()
+        if request_id != st.session_state.last_processed_request_id:
+            st.session_state.last_processed_request_id = request_id
 
-    except Exception as exc:
-        print(f"ML error: {exc}")
+            print(f"Python received prompt: {prompt}")
 
-        st.session_state.detection_result = {
-            "prediction": "ERROR",
-            "target": None,
-            "decision_score": None,
-            "error": str(exc),
-        }
+            try:
+                prediction = predict_prompt(prompt)
+                print(f"ML result: {prediction}")
 
-        st.rerun()
+            except Exception as exc:
+                print(f"ML error: {exc}")
+
+                prediction = {
+                    "prediction": "ERROR",
+                    "target": None,
+                    "decision_score": None,
+                    "error": str(exc),
+                }
+
+            st.session_state.detection_result = prediction
+            st.session_state.detection_response_id = request_id
+
+
+            print("ML PREDICTION:", prediction)
+            print(
+                "RESPONSE ID:",
+                st.session_state.detection_response_id
+            )
+
+            st.rerun()
+
+    except (json.JSONDecodeError, KeyError, TypeError) as exc:
+        print(f"Invalid prompt request received: {exc}")
