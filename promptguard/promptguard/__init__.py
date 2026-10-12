@@ -1,13 +1,30 @@
+from pathlib import Path
 import streamlit as st
 
+BUILD_DIR = Path(__file__).parent / "frontend" / "build"
+
+js_files = list(BUILD_DIR.glob("index-*.js"))
+css_files = list(BUILD_DIR.glob("index-*.css"))
+
+if len(js_files) != 1:
+    raise FileNotFoundError(
+        f"Expected one JavaScript bundle in {BUILD_DIR}, found {len(js_files)}"
+    )
+
+if len(css_files) != 1:
+    raise FileNotFoundError(
+        f"Expected one CSS bundle in {BUILD_DIR}, found {len(css_files)}"
+    )
+
+js_code = js_files[0].read_text(encoding="utf-8")
+css_code = css_files[0].read_text(encoding="utf-8")
 
 out = st.components.v2.component(
     "promptguard.promptguard",
-    js="index-*.js",
-    css="index-*.css",
+    js=js_code,
+    css=css_code,
     html='<div class="react-root"></div>',
 )
-
 
 def promptguard(
     name,
