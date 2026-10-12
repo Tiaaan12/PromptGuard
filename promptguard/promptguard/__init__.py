@@ -1,7 +1,7 @@
 from pathlib import Path
 import streamlit as st
 
-BUILD_DIR = Path(__file__).parent / "frontend" / "build"
+BUILD_DIR = Path(__file__).parent / "promptguard" / "frontend" / "build"
 
 js_files = list(BUILD_DIR.glob("index-*.js"))
 css_files = list(BUILD_DIR.glob("index-*.css"))
