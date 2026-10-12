@@ -75,7 +75,7 @@ export default function DetectionCard({
 
   if (!isInjection) {
     return (
-      <div className="mb-2.5 rounded-[10px] border border-pg-safe-border bg-pg-safe-bg px-3.5 py-2.5 text-[13px]">
+      <div className="mb-2.5 rounded-[10px] border border-pg-safe-border border-solid bg-pg-safe-bg px-3.5 py-2.5 text-[13px]">
         <div className="flex flex-wrap items-center gap-2.5">
           <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-pg-safe text-pg-bg">
             ✓
@@ -91,7 +91,7 @@ export default function DetectionCard({
             type="button"
             onClick={() => setShowAnalysis((value) => !value)}
             aria-expanded={showAnalysis}
-            className="ml-auto text-xs text-pg-safe hover:underline"
+            className="rounded-md border cursor-pointer border-pg-safe-border px-3 py-1.5 text-xs font-medium text-pg-safe transition-colors hover:bg-green/10 ml-auto"
           >
             {showAnalysis ? "Hide Analysis ↑" : "View Analysis ↓"}
           </button>
@@ -103,7 +103,7 @@ export default function DetectionCard({
   }
 
   return (
-    <div className="mb-2.5 rounded-[10px] border border-pg-danger-border bg-pg-danger-bg px-3.5 py-3 text-[13px]">
+    <div className="mb-2.5 rounded-[10px] border border-pg-danger-border border-solid bg-pg-danger-bg px-3.5 py-3 text-[13px]">
       <div className="mb-2.5 flex items-center gap-2">
         <span className="flex items-center text-pg-danger">
           <ShieldIcon size={16} />
@@ -115,7 +115,7 @@ export default function DetectionCard({
       </div>
 
       <div className="mb-3 grid grid-cols-2 gap-x-5 gap-y-2">
-        <div>
+        <div className="flex gap-2">
           <span className="font-mono text-[11px] text-pg-muted">
             Classification:
           </span>
@@ -124,7 +124,7 @@ export default function DetectionCard({
           </p>
         </div>
 
-        <div>
+        <div className="flex gap-2">
           <span className="font-mono text-[11px] text-pg-muted">
             Target:
           </span>
@@ -133,14 +133,14 @@ export default function DetectionCard({
           </p>
         </div>
 
-        <div>
+        <div className="flex gap-2">
           <span className="font-mono text-[11px] text-pg-muted">
             Model score:
           </span>
           <p className="font-mono text-xs text-pg-body">{score}</p>
         </div>
 
-        <div>
+        <div className="flex gap-2">
           <span className="font-mono text-[11px] text-pg-muted">
             Action:
           </span>
@@ -154,7 +154,7 @@ export default function DetectionCard({
         type="button"
         onClick={() => setShowAnalysis((value) => !value)}
         aria-expanded={showAnalysis}
-        className="rounded-md border border-pg-danger-border px-3 py-1.5 text-xs font-medium text-pg-danger transition-colors hover:bg-black/10"
+        className="rounded-md border cursor-pointer border-pg-danger-border px-3 py-1.5 text-xs font-medium text-pg-danger transition-colors hover:bg-black/10"
       >
         {showAnalysis ? "Hide Analysis ↑" : "View Analysis ↓"}
       </button>

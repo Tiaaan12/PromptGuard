@@ -49,9 +49,6 @@ if "detection_response_id" not in st.session_state:
 if "last_processed_request_id" not in st.session_state:
     st.session_state.last_processed_request_id = None
 
-print("OUTGOING RESULT:", st.session_state.detection_result)
-print("OUTGOING RESPONSE ID:", st.session_state.detection_response_id)
-
 component_result = promptguard(
     "PromptGuard",
     key="promptguard",
@@ -62,17 +59,12 @@ component_result = promptguard(
 
 raw_request = component_result.prompt_submitted
 
-print("COMPONENT REQUEST:", repr(raw_request))
-
 if raw_request:
     try:
         request = json.loads(raw_request)
 
         request_id = request["request_id"]
         prompt = request["prompt"]
-
-        print("REQUEST ID:", request_id)
-        print("PROMPT:", prompt)
 
         if request_id != st.session_state.last_processed_request_id:
             st.session_state.last_processed_request_id = request_id
@@ -95,13 +87,6 @@ if raw_request:
 
             st.session_state.detection_result = prediction
             st.session_state.detection_response_id = request_id
-
-
-            print("ML PREDICTION:", prediction)
-            print(
-                "RESPONSE ID:",
-                st.session_state.detection_response_id
-            )
 
             st.rerun()
 

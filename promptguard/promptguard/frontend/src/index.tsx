@@ -23,7 +23,6 @@ const MyComponentRoot: FrontendRenderer<
   MyComponentDataShape
 > = (args) => {
   const { data, parentElement, setTriggerValue } = args;
-  console.log("[PromptGuard] Data received from Streamlit:", data);
 
   const rootElement = parentElement.querySelector(".react-root");
 
@@ -44,7 +43,6 @@ const MyComponentRoot: FrontendRenderer<
     detection_result,
     detection_response_id,
   } = data;
-console.log("[PromptGuard] Raw component data:", data);
 
   reactRoot.render(
     <StrictMode>

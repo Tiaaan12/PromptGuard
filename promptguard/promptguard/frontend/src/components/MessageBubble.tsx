@@ -33,7 +33,7 @@ export default function MessageBubble({ message }: Props) {
             "linear-gradient(135deg, #D4B97A 0%, #B89850 100%)",
         }}
       >
-        <ShieldIcon size={17} />
+        <ShieldIcon size={24} />
       </div>
 
       <div className="min-w-0 flex-1">

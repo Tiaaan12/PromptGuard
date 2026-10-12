@@ -73,25 +73,15 @@ const MyComponent: FC<MyComponentProps> = ({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-
+  const [inputError, setInputError] = useState("");
   const pendingRequestRef = useRef<PendingRequest | null>(null);
 
   const activeMessages =
     conversations.find((conversation) => conversation.id === activeId)
       ?.messages ?? [];
-  console.log("[PromptGuard] Incoming Python data:", {
-  detection_result,
-  detection_response_id,
-  pendingRequest: pendingRequestRef.current,
-});
-  // Associate each returned result with its matching request.
+
   useEffect(() => {
 
-    console.log("[PromptGuard] Received result:", {
-    detection_result,
-    detection_response_id,
-    pendingRequest: pendingRequestRef.current,
-  });
     if (!detection_result || !detection_response_id) {
       return;
 
@@ -101,10 +91,6 @@ const MyComponent: FC<MyComponentProps> = ({
     const pending = pendingRequestRef.current;
 
     if (!pending || pending.requestId !== detection_response_id) {
-       console.warn("[PromptGuard] Request ID mismatch:", {
-        expected: pending?.requestId,
-        received: detection_response_id,
-      });
       return;
     }
 
@@ -158,9 +144,27 @@ const MyComponent: FC<MyComponentProps> = ({
   function handleExampleClick(text: string) {
     setInput(text);
   }
+  function handleInputChange(value: string) {
+    setInput(value);
+
+    if (value.trim()) {
+      setInputError("");
+    }
+  }
 
   function handleSend() {
     const text = input.trim();
+
+    if (pendingRequestRef.current !== null) {
+      return;
+    }
+
+    if (!text) {
+      setInputError("Please enter a prompt before sending.");
+      return;
+    }
+
+    setInputError("");
 
     if (!text || pendingRequestRef.current !== null) {
       return;
@@ -222,7 +226,6 @@ const MyComponent: FC<MyComponentProps> = ({
     setIsTyping(true);
     setInput("");
 
-    // Send both the request ID and prompt to Python.
     setTriggerValue(
       "prompt_submitted",
       JSON.stringify({
@@ -253,9 +256,17 @@ const MyComponent: FC<MyComponentProps> = ({
           onExampleClick={handleExampleClick}
         />
 
+        {inputError && (
+          <p
+            role="alert"
+            className="px-6 pb-2 text-sm text-pg-danger"
+          >
+            {inputError}
+          </p>
+        )}
         <ChatInput
           value={input}
-          onChange={setInput}
+          onChange={handleInputChange}
           onSend={handleSend}
         />
       </main>

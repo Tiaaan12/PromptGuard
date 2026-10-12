@@ -2,8 +2,6 @@ import { useEffect, useRef } from "react";
 
 import type { Message } from "../types/chat";
 import { ShieldIcon } from "../icons";
-import type { DetectionResult } from "../types/detection";
-import DetectionCard from "./DetectionCard";
 import MessageBubble from "./MessageBubble";
 
 type Props = {
@@ -29,7 +27,7 @@ function TypingIndicator() {
             "linear-gradient(135deg, #D4B97A 0%, #B89850 100%)",
         }}
       >
-        <ShieldIcon size={17} />
+        <ShieldIcon size={24} />
       </div>
 
       <div
@@ -109,7 +107,7 @@ export default function ChatWindow({
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-      <div className="mx-auto w-full max-w-[740px] px-6 pb-6 pt-6">
+      <div className="mx-auto w-full max-w-[960px] px-6 pb-6 pt-6">
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} />
         ))}
