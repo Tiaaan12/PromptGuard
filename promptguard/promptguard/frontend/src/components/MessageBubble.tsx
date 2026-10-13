@@ -11,7 +11,7 @@ export default function MessageBubble({ message }: Props) {
     return (
       <div className="mb-7 flex justify-end">
         <div
-          className="max-w-[75%] rounded-[16px_16px_4px_16px] px-4 py-2.5 text-[14px] font-medium leading-relaxed text-[#0C1C30]"
+          className="max-w-[90%] break-words rounded-[16px_16px_4px_16px] px-4 py-2.5 text-[14px] font-medium leading-relaxed text-[#0C1C30] sm:max-w-[75%]"
           style={{
             background:
               "linear-gradient(135deg, #B89850 0%, #D4B97A 100%)",
@@ -45,7 +45,7 @@ export default function MessageBubble({ message }: Props) {
         )}
 
         {message.content && (
-          <p className="text-[14px] leading-[1.7] text-pg-body">
+          <p className="break-words text-[14px] leading-[1.7] text-pg-body">
             {message.content}
           </p>
         )}

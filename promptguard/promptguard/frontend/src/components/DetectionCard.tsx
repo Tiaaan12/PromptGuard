@@ -15,7 +15,7 @@ export default function DetectionCard({
 
   if (result.prediction === "ERROR") {
     return (
-      <div className="mb-2.5 rounded-xl border border-pg-border-2 bg-pg-surface p-4 text-sm text-pg-body">
+      <div className="mb-2.5 max-w-full rounded-xl border border-pg-border-2 bg-pg-surface p-4 text-sm text-pg-body">
         <p className="font-semibold">Detection unavailable</p>
         <p className="mt-1">
           {result.error ?? "An error occurred during analysis."}
@@ -32,51 +32,49 @@ export default function DetectionCard({
       : result.decision_score.toFixed(3);
 
   const analysis = (
-    <div className="mt-3 rounded-lg border border-pg-border-2 bg-pg-analysis p-3 font-mono text-[11.5px] leading-relaxed text-pg-muted">
-  <p className="mb-2 font-medium text-pg-violet">
-    Why This Prediction?
-  </p>
+    <div className="mt-3 max-w-full rounded-lg border border-pg-border-2 bg-pg-analysis p-3 font-mono text-[11px] leading-relaxed text-pg-muted sm:text-[11.5px]">
+      <p className="mb-2 font-medium text-pg-violet">Why This Prediction?</p>
 
-  <p>Model: Linear SVM</p>
-  <p>Features: Character TF-IDF (3–5 grams)</p>
-  <p>Training version: V3</p>
-  <p>
-    Predicted class:{" "}
-    {result.target == null
-      ? "Unavailable"
-      : result.target === 0
-        ? "Benign (0)"
-        : "Injection (1)"}
-  </p>
-  <p>Decision boundary: 0.0</p>
-  <p>
-    Decision score:{" "}
-    {result.decision_score == null
-      ? "Unavailable"
-      : result.decision_score.toFixed(3)}
-  </p>
+      <p className="break-words">Model: Linear SVM</p>
+      <p className="break-words">Features: Character TF-IDF (3–5 grams)</p>
+      <p className="break-words">Training version: V3</p>
+      <p className="break-words">
+        Predicted class: {" "}
+        {result.target == null
+          ? "Unavailable"
+          : result.target === 0
+            ? "Benign (0)"
+            : "Injection (1)"}
+      </p>
+      <p className="break-words">Decision boundary: 0.0</p>
+      <p className="break-words">
+        Decision score: {" "}
+        {result.decision_score == null
+          ? "Unavailable"
+          : result.decision_score.toFixed(3)}
+      </p>
 
-  {result.decision_score != null && (
-    <p className="mt-2">
-      {result.decision_score > 0
-        ? "The positive decision score places this prompt on the injection side of the SVM decision boundary."
-        : result.decision_score < 0
-          ? "The negative decision score places this prompt on the benign side of the SVM decision boundary."
-          : "The decision score is at the SVM decision boundary."}
-    </p>
-  )}
+      {result.decision_score != null && (
+        <p className="mt-2 break-words">
+          {result.decision_score > 0
+            ? "The positive decision score places this prompt on the injection side of the SVM decision boundary."
+            : result.decision_score < 0
+              ? "The negative decision score places this prompt on the benign side of the SVM decision boundary."
+              : "The decision score is at the SVM decision boundary."}
+        </p>
+      )}
 
-  <p className="mt-2">
-    The model uses learned character patterns to classify the prompt.
-    The decision score is not a calibrated probability.
-  </p>
-</div>
+      <p className="mt-2 break-words">
+        The model uses learned character patterns to classify the prompt.
+        The decision score is not a calibrated probability.
+      </p>
+    </div>
   );
 
   if (!isInjection) {
     return (
       <div className="mb-2.5 rounded-[10px] border border-pg-safe-border border-solid bg-pg-safe-bg px-3.5 py-2.5 text-[13px]">
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2.5">
           <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-pg-safe text-pg-bg">
             ✓
           </span>
@@ -91,7 +89,7 @@ export default function DetectionCard({
             type="button"
             onClick={() => setShowAnalysis((value) => !value)}
             aria-expanded={showAnalysis}
-            className="rounded-md border cursor-pointer border-pg-safe-border px-3 py-1.5 text-xs font-medium text-pg-safe transition-colors hover:bg-green/10 ml-auto"
+            className="w-full cursor-pointer rounded-md border border-pg-safe-border px-3 py-1.5 text-xs font-medium text-pg-safe transition-colors hover:bg-green/10 sm:ml-auto sm:w-auto"
           >
             {showAnalysis ? "Hide Analysis ↑" : "View Analysis ↓"}
           </button>
@@ -103,48 +101,48 @@ export default function DetectionCard({
   }
 
   return (
-    <div className="mb-2.5 rounded-[10px] border border-pg-danger-border border-solid bg-pg-danger-bg px-3.5 py-3 text-[13px]">
-      <div className="mb-2.5 flex items-center gap-2">
+    <div className="mb-2.5 max-w-full rounded-[10px] border border-pg-danger-border border-solid bg-pg-danger-bg px-3.5 py-3 text-[13px]">
+      <div className="mb-2.5 flex min-w-0 items-center gap-2">
         <span className="flex items-center text-pg-danger">
           <ShieldIcon size={16} />
         </span>
 
-        <span className="font-semibold text-pg-danger">
+        <span className="min-w-0 break-words font-semibold text-pg-danger">
           Potential Prompt Injection Detected
         </span>
       </div>
 
-      <div className="mb-3 grid grid-cols-2 gap-x-5 gap-y-2">
-        <div className="flex gap-2">
-          <span className="font-mono text-[11px] text-pg-muted">
+      <div className="mb-3 grid grid-cols-1 gap-x-5 gap-y-2 sm:grid-cols-2">
+        <div className="flex min-w-0 gap-2">
+          <span className="shrink-0 font-mono text-[11px] text-pg-muted">
             Classification:
           </span>
-          <p className="font-mono text-xs text-pg-body">
+          <p className="min-w-0 break-words font-mono text-xs text-pg-body">
             Prompt Injection
           </p>
         </div>
 
-        <div className="flex gap-2">
-          <span className="font-mono text-[11px] text-pg-muted">
+        <div className="flex min-w-0 gap-2">
+          <span className="shrink-0 font-mono text-[11px] text-pg-muted">
             Target:
           </span>
-          <p className="font-mono text-xs text-pg-body">
+          <p className="min-w-0 break-words font-mono text-xs text-pg-body">
             {result.target ?? "Unavailable"}
           </p>
         </div>
 
-        <div className="flex gap-2">
-          <span className="font-mono text-[11px] text-pg-muted">
+        <div className="flex min-w-0 gap-2">
+          <span className="shrink-0 font-mono text-[11px] text-pg-muted">
             Model score:
           </span>
-          <p className="font-mono text-xs text-pg-body">{score}</p>
+          <p className="min-w-0 break-words font-mono text-xs text-pg-body">{score}</p>
         </div>
 
-        <div className="flex gap-2">
-          <span className="font-mono text-[11px] text-pg-muted">
+        <div className="flex min-w-0 gap-2">
+          <span className="shrink-0 font-mono text-[11px] text-pg-muted">
             Action:
           </span>
-          <p className="font-mono text-xs font-semibold text-pg-danger">
+          <p className="min-w-0 break-words font-mono text-xs font-semibold text-pg-danger">
             {blocked ? "Blocked" : "Flagged"}
           </p>
         </div>
@@ -154,7 +152,7 @@ export default function DetectionCard({
         type="button"
         onClick={() => setShowAnalysis((value) => !value)}
         aria-expanded={showAnalysis}
-        className="rounded-md border cursor-pointer border-pg-danger-border px-3 py-1.5 text-xs font-medium text-pg-danger transition-colors hover:bg-black/10"
+        className="cursor-pointer rounded-md border border-pg-danger-border px-3 py-1.5 text-xs font-medium text-pg-danger transition-colors hover:bg-black/10"
       >
         {showAnalysis ? "Hide Analysis ↑" : "View Analysis ↓"}
       </button>

@@ -46,18 +46,18 @@ export default function ChatInput({
 
 
   return (
-    <div className="px-6 pb-4 pt-3 bg-pg-bg border-t border-solid border-pg-border">
+    <div className="border-t border-solid border-pg-border bg-pg-bg px-3 pb-3 pt-3 sm:px-6 sm:pb-4 sm:pt-3">
 
-      <div className="max-w-[740px] mx-auto">
+      <div className="mx-auto max-w-full sm:max-w-[740px]">
 
  
         <div
           className="
             flex items-end gap-2
-            px-4 py-2.5 pr-2.5
             rounded-[14px]
             border border-pg-border-2
             bg-pg-surface
+            px-3 py-2 pr-2
             transition-[border-color,box-shadow]
             duration-150
           "
@@ -92,10 +92,12 @@ export default function ChatInput({
 
             className="
               flex-1
+              min-w-0
               bg-transparent
               border-none
               outline-none
-              text-[14px]
+              text-[16px]
+              sm:text-[14px]
               text-pg-text
               placeholder:text-pg-dim
               font-sans
@@ -115,8 +117,10 @@ export default function ChatInput({
             disabled={!canSend}
 
             className="
-              w-[34px]
-              h-[34px]
+              h-11
+              w-11
+              sm:h-[34px]
+              sm:w-[34px]
               rounded-lg
               border-none
               flex
@@ -127,6 +131,7 @@ export default function ChatInput({
               duration-150
               cursor-pointer
               disabled:cursor-default
+              touch-manipulation
             "
 
             style={{
@@ -147,15 +152,7 @@ export default function ChatInput({
           </button>
 
         </div>
-        <div className="
-          flex
-          items-center
-          justify-center
-          gap-1.5
-          mt-2
-          text-[11px]
-          text-pg-dim
-        ">
+        <div className="mt-2 flex items-center justify-center gap-1.5 text-[10px] text-pg-dim sm:text-[11px]">
           <ShieldIcon size={11} />
 
           Protected by PromptGuard ML

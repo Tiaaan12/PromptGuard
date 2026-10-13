@@ -53,15 +53,15 @@ function EmptyState({
   onExampleClick: (text: string) => void;
 }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-4 px-10">
+    <div className="flex h-full flex-col items-center justify-center gap-4 px-4 sm:px-10">
       <ShieldIcon size={30} />
 
       <div className="text-center">
-        <h2 className="mb-1.5 text-[20px] font-semibold text-pg-text">
+        <h2 className="mb-1.5 text-[18px] font-semibold text-pg-text sm:text-[20px]">
           Hi, I'm PromptGuard.
         </h2>
 
-        <p className="max-w-[360px] text-[14px] leading-relaxed text-pg-muted">
+        <p className="max-w-[360px] text-[13px] leading-relaxed text-pg-muted sm:text-[14px]">
           Send me a message and I'll check it for potential prompt injection
           attacks.
         </p>
@@ -73,7 +73,7 @@ function EmptyState({
             key={prompt}
             type="button"
             onClick={() => onExampleClick(prompt)}
-            className="cursor-pointer rounded-full border border-pg-border-2 bg-pg-surface px-3.5 py-2 text-[12.5px] text-pg-muted transition-colors duration-150 hover:border-pg-indigo hover:bg-pg-active hover:text-pg-violet"
+            className="cursor-pointer rounded-full border border-pg-border-2 bg-pg-surface px-3.5 py-2 text-[12px] leading-snug text-pg-muted transition-colors duration-150 hover:border-pg-indigo hover:bg-pg-active hover:text-pg-violet sm:text-[12.5px]"
           >
             {prompt}
           </button>
@@ -107,7 +107,7 @@ export default function ChatWindow({
 
   return (
     <div className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
-      <div className="mx-auto w-full max-w-[960px] px-6 pb-6 pt-6">
+      <div className="mx-auto w-full max-w-[960px] px-4 pb-4 pt-4 sm:px-6 sm:pb-6 sm:pt-6">
         {messages.map((message) => (
           <MessageBubble key={message.id} message={message} />
         ))}

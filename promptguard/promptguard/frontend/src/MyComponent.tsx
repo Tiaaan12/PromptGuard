@@ -236,7 +236,7 @@ const MyComponent: FC<MyComponentProps> = ({
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-pg-bg font-sans">
+    <div className="flex min-h-dvh w-full flex-col overflow-hidden bg-pg-bg font-sans md:h-screen md:flex-row">
       <SideBar
         conversations={conversations}
         activeId={activeId}
@@ -244,7 +244,7 @@ const MyComponent: FC<MyComponentProps> = ({
         onNewChat={newChat}
       />
 
-      <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
+      <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <NavBar />
 
         <ChatWindow
@@ -259,7 +259,7 @@ const MyComponent: FC<MyComponentProps> = ({
         {inputError && (
           <p
             role="alert"
-            className="px-6 pb-2 text-sm text-pg-danger"
+            className="break-words px-4 pb-2 text-xs text-pg-danger sm:px-6 sm:text-sm"
           >
             {inputError}
           </p>
