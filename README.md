@@ -29,6 +29,16 @@ PromptGuard classifies submitted text as **Benign** or **Injection** using a sav
 - Includes exploratory-analysis figures, model-comparison outputs, and error-analysis files.
 - Uses a saved preprocessing-and-classification pipeline for inference.
 
+## Application Interface
+
+PromptGuard features a dark-themed chat interface for submitting prompts and reviewing potential prompt-injection detections.
+
+### Chat Interface
+![PromptGuard chat interface](docs/images/promptguard-interface.png)
+
+### Detection Result
+![PromptGuard injection detection result](docs/images/promptguard-detection.png)
+
 ## Model
 
 | Setting | Selected configuration |
@@ -227,6 +237,6 @@ Review the staged files carefully. If excluding `promptguard/ml/data/processed/`
 
 ## Dataset attribution and deployment link
 
-- **Primary dataset source:** Add the exact Kaggle dataset URL and the applicable license/permission before submission.
-- **External dataset source:** Add the exact source URL and license/permission before submission.
-- **Live application:** Add the deployed Streamlit URL after deployment.
+- **Primary dataset source:** https://www.kaggle.com/datasets/krishnayadav456wrsty/prompt-injection-and-jailbreak-detection-dataset
+- **External dataset source:** https://github.com/mirzaakhi/prompt-injection-detection-dataset/tree/main
+- **Live application:** https://promptguard-ai.streamlit.app/.
