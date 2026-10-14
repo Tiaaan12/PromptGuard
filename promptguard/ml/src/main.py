@@ -28,6 +28,7 @@ from visualize import (
     plot_svm_top_coefficients,
     plot_class_distribution_by_category,
     plot_prompt_length_distribution,
+    plot_baseline_confusion_matrix
 )
 
 
@@ -50,6 +51,14 @@ def create_output_directories():
 
 def generate_visualizations(raw_df):
     print("\nGenerating visualizations...")
+    plot_baseline_confusion_matrix(
+    predictions_path=(
+        RESULTS_PATH / "errors" / "baseline_predictions.csv"
+    ),
+    output_path=(
+        VISUALIZATION_PATH / "baseline_confusion_matrix.png"
+    ),
+)
     plot_prompt_length_distribution(
         raw_df,
         VISUALIZATION_PATH / "prompt_length_distribution.png",

@@ -146,6 +146,42 @@ def plot_internal_test_confusion_matrix(
     )
 
 
+def plot_baseline_confusion_matrix(
+    predictions_path,
+    output_path,
+):
+    df = pd.read_csv(predictions_path)
+
+    cm = confusion_matrix(
+        df["actual"],
+        df["predicted"],
+        labels=[0, 1],
+    )
+
+    print("\nBaseline Internal Test Confusion Matrix:")
+    print(cm)
+
+    fig, ax = plt.subplots(figsize=(5, 4))
+
+    display = ConfusionMatrixDisplay(
+        confusion_matrix=cm,
+        display_labels=["Benign", "Injection"],
+    )
+
+    display.plot(
+        ax=ax,
+        values_format="d",
+        cmap="Blues",
+    )
+
+    ax.set_title("Baseline Model — Internal Test Set")
+    ax.set_xlabel("Predicted Label")
+    ax.set_ylabel("True Label")
+
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+
 def plot_external_f1_progression(
     results_path,
     output_path
